@@ -12,7 +12,7 @@ using namespace std;
 
 void interact()
 {
-   cout << "Welcome to Pokemon!\n";
+   cout << "Welcome to Pokemon HAHAHAHAHAHA!\n";
    Game game;
    Trainer p;
    Trainer c;
