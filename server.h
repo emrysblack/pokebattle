@@ -7,8 +7,22 @@
 //
 
 #include "iostream"
+using namespace std;
 
 static class server
 {
+    int portNum;
+    int serverSocket;
+    int clientSocket;
+    
+    void setPortNum(int port) {portNum = port;}
+    bool findClient();
+    
     
 };
+
+bool findClient()
+{
+    cout << "Enter other player's port number: ";
+    return true;
+}

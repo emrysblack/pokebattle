@@ -28,8 +28,8 @@ void interact()
          case 'b':
             game.battle(p, c);
             break;
-         case 'n':
-            cout << "Ok, no battle\n";
+         case 'm':
+            cout << "Looking for player\n";
             break;
          case 'q':
             cout << "Thanks for playing\n";
