@@ -16,13 +16,11 @@ static class server
     int clientSocket;
     
     void setPortNum(int port) {portNum = port;}
-    bool findClient();
-    
+    bool findClient()
+    {
+        cout << "Enter other player's port number: ";
+        return true;
+    }
     
 };
 
-bool findClient()
-{
-    cout << "Enter other player's port number: ";
-    return true;
-}
