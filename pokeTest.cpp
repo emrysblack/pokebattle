@@ -6,13 +6,14 @@
 #include "pokemon.h"
 #include "move.h"
 #include "game.h"
+#include "server.h"
 using namespace std;
 
 
 
 void interact()
 {
-   cout << "Welcome to Pokemon HAHAHAHAHAHA!\n";
+   cout << "Welcome to Pokemon !\n";
    Game game;
    Trainer p;
    Trainer c;

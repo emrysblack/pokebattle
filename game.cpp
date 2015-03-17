@@ -5,6 +5,7 @@
 #include "pokemon.h"
 #include "move.h"
 #include "game.h"
+#include "server.h"
 using namespace std;
 
 float Game::getTypeMult(const Pokemon & target, Move * move)
