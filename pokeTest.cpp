@@ -11,6 +11,12 @@ using namespace std;
 
 
 
+void mSetUp()
+{
+    Server connection;
+    connection.findClient();
+}
+
 void interact()
 {
    cout << "Welcome to Pokemon !\n";
@@ -29,7 +35,7 @@ void interact()
             game.battle(p, c);
             break;
          case 'm':
-            cout << "Looking for player\n";
+              mSetUp();
             break;
          case 'q':
             cout << "Thanks for playing\n";
@@ -40,6 +46,7 @@ void interact()
       }
    } while (option != 'q');
 }
+
 
 int main(int argc, char ** argv)
 {
