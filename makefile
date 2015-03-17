@@ -5,7 +5,7 @@
 a.out : game.o trainer.o pokeTest.o
 	g++ game.o trainer.o pokeTest.o
 
-game.o : game.cpp game.h trainer.h pokemon.h move.h
+game.o : game.cpp game.h trainer.h pokemon.h move.h server.h
 	g++ -c game.cpp
 
 trainer.o : trainer.cpp trainer.h pokemon.h

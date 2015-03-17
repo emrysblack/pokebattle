@@ -49,7 +49,7 @@ class Server
     }
 };
 
-//int Server::portNum = 5000;
+int Server::portNum = 5000;
 //int Server::serverSocket;
 //int Server::clientSocket;
 

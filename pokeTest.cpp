@@ -5,8 +5,8 @@
 #include "trainer.h"
 #include "pokemon.h"
 #include "move.h"
-#include "game.h"
 #include "server.h"
+#include "game.h"
 using namespace std;
 
 
