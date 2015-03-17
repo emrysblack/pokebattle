@@ -11,7 +11,7 @@ game.o : game.cpp game.h trainer.h pokemon.h move.h
 trainer.o : trainer.cpp trainer.h pokemon.h
 	g++ -c trainer.cpp
 
-pokeTest.o : pokeTest.cpp trainer.h pokemon.h move.h game.h
+pokeTest.o : pokeTest.cpp trainer.h pokemon.h move.h game.h server.h
 	g++ -c pokeTest.cpp
 
 clean :

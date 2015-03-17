@@ -13,16 +13,16 @@ using namespace std;
 class Server 
 {
     public:
-    int portNum;
-    int serverSocket;
-    int clientSocket;
+    static int portNum;
+    static int serverSocket;
+    static int clientSocket;
     
-    const int OP_MOVE1 = 1;
-    const int OP_MOVE2 = 2;
-    const int OP_MOVE3 = 3;
-    const int OP_MOVE4 = 4;
+    /* const int OP_MOVE1 = 1; */
+    /* const int OP_MOVE2 = 2; */
+    /* const int OP_MOVE3 = 3; */
+    /* const int OP_MOVE4 = 4; */
     
-    bool findClient()
+    static bool findClient()
     {
         cout << "What port number will you use? (must be greater than 1000) : ";
         cin >> portNum;
@@ -48,9 +48,9 @@ class Server
     }
 };
 
-//int Server::portNum;
-//int Server::serverSocket;
-//int Server::clientSocket;
+int Server::portNum = 5000;
+int Server::serverSocket;
+int Server::clientSocket;
 
 //SERVER
 /***********************************************************************

@@ -13,8 +13,9 @@ using namespace std;
 
 void mSetUp()
 {
-    Server connection;
-    connection.findClient();
+   //Server connection;
+   //connection.findClient();
+   Server::findClient();
 }
 
 void interact()
