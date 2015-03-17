@@ -9,12 +9,12 @@
 #include "game.h"
 using namespace std;
 
-
+int Server::portNum = 5000;
+int Server::serverSocket;
+int Server::clientSocket;
 
 void mSetUp()
 {
-   //Server connection;
-   //connection.findClient();
    Server::findClient();
 }
 

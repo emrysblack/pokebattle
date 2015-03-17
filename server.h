@@ -7,6 +7,7 @@
 //
 #ifndef SERVER_H
 #define SERVER_H
+
 #include "iostream"
 #include "move.h"
 using namespace std;
@@ -49,9 +50,7 @@ class Server
     }
 };
 
-int Server::portNum = 5000;
-//int Server::serverSocket;
-//int Server::clientSocket;
+
 
 //SERVER
 /***********************************************************************

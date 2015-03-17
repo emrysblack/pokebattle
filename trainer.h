@@ -3,6 +3,7 @@
 #ifndef TRAINER_H
 #define TRAINER_H
 #include "pokemon.h"
+
 class Trainer
 {
    public:
