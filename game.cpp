@@ -329,6 +329,198 @@ bool Game::battle(Trainer& p, Trainer& c)
    return win;
 }
 
+bool Game::netBattle(Trainer& p, Trainer& c)
+{
+   bool player = true;
+   bool win = true; // assume the win
+   Pokemon * one = p.getNext();
+   Pokemon * two = c.getNext();
+   Pokemon * first = one;
+   Pokemon * second = two;
+   // set modifiers to normal for battle
+   battlePrep(one);
+   battlePrep(two);
+   char option;
+   std::cout << "-----Battle-----\n\t" << one->getName() << std::endl
+             << "VS\n\t" << two->getName()
+             << "\n----------------\n";
+   while (!one->fainted() && !two->fainted())
+   {
+      std::cout /*<< "\033[2J"*/ << "\n\t" << one->getName() << " HP: "
+                  << one->getHPC()
+                  << "\n\t" << two->getName() << " HP: "
+                  << two->getHPC() << std::endl;
+      std::cout << "\nBattle Command (? for options) ";
+      std::cin >> option;
+      option = tolower(option); // convert to lower case
+      int priorityP = 0; // move order for player
+      int priorityC = 0; // move order for computer
+      Move * pMove;
+      Move * cMove;
+
+      // select action
+      switch(option)
+      {
+         case 'a':
+            cout << "attack\n";
+            pMove = selectMove(*one);
+            cMove = selectMove(*two);
+            break;
+         case 'd':
+            cout << "defend\n";
+            break;
+         case 's':
+            cout << "switch pokemon\n";
+            break;
+         case 'i':
+            cout << "item\n";
+            break;
+         case 'r':
+            cout << "run\n";
+            break;
+         case '?':
+            displayOptions();
+            continue; // display does not cost a turn
+         default:
+            cout << "unknown command\n";
+            continue; // does not cost a turn
+      }
+
+      // execute actions in correct order
+
+      // if the opponent is faster and
+      // player is not using higher priority move
+      // comp goes first
+      if ((one->getSpeed() < two->getSpeed() ||
+           pMove->priority < cMove->priority) &&
+          pMove->priority <= cMove->priority)
+      {
+         //  cout << "Opponent Faster\n";
+         first = two;
+         second = one;
+         // swap moves
+         Move * temp = pMove;
+         pMove = cMove;
+         cMove = temp;
+      }
+      else // player moves first
+      {
+         // cout << "You are faster\n";
+         first = one;
+         second = two;
+         // moves already in correct order
+      }
+      // faster goes first
+
+      // display message
+      std::cout << std::endl;
+      if (first == two)
+         cout << "Foe ";
+      cout << first->getName()
+             << " used " << pMove->name << "!\n";
+
+      // execute attack if attack hits
+
+      // accuracy will be move's accuracy times attack poke's accuracy over
+      // target's evasion
+      float acMod = first->getMod(ACC);
+      (acMod < 0)? acMod = 2/(acMod * -1 + 2) : acMod = (acMod + 2) / 2;
+      // (acMod < .25)? acMod = .25 : acMod = acMod;
+      // (acMod > 4)? acMod = 4 : acMod = acMod;
+      float evMod = second->getMod(EVADE);
+      (evMod < 0)? evMod = 2/(evMod * -1 + 2) : evMod = (evMod + 2) / 2;
+      // (evMod < .25)? evMod = .25 : evMod = evMod;
+      // (evMod > 4)? evMod = 4 : evMod = evMod;
+      int accuracy = pMove->acc * (100 * acMod)/(100 * evMod);
+      cout << accuracy << endl;
+      bool hit = (rand() % 100) < accuracy;
+      if (hit)
+      {
+         attack(*first, *second, pMove);
+      }
+      else
+      {
+         std::cout << std::endl;
+         if (first == two)
+            cout << "Foe ";
+         cout << first->getName();
+         std::cout << "'s attack missed!\n";
+      }
+      // second can go if still healthy
+      if (!second->fainted())
+      {
+         std::cout << std::endl;
+         if (second == two)
+            cout << "Opponent's ";
+         cout << second->getName()
+              << " used " << cMove->name << "!\n";
+         // execute attack if attack hits
+
+         // prepare random 
+         // srand(time(NULL));
+
+         // accuracy will be move's accuracy times attack poke's
+         // accuracy over target's evasion
+         acMod = second->getMod(ACC);
+         (acMod < 0)? acMod = 2/(acMod * -1 + 2) : acMod = (acMod + 2) / 2;
+         (acMod < .25)? acMod = .25 : acMod = acMod;
+         (acMod > 4)? acMod = 4 : acMod = acMod;
+         evMod = first->getMod(EVADE);
+         (evMod < 0)? evMod = 2/(evMod * -1 + 2) : evMod = (evMod + 2) / 2;
+         (evMod < .25)? evMod = .25 : evMod = evMod;
+         (evMod > 4)? evMod = 4 : evMod = evMod;
+         accuracy = cMove->acc * (100 * acMod)/(100 * evMod);
+         cout << accuracy << endl;
+         hit = (rand() % 100) < accuracy;
+         if (hit)
+         {
+           attack(*second, *first, cMove);
+         }
+         else
+         {
+            cout << endl;
+            if (second == two)
+               cout << "Foe ";
+            cout << second->getName();
+            cout << "'s attack missed!\n";
+         }
+      }
+      // run ends battle
+      // if (option == 'r')
+      // break;
+      // opponent attack
+
+      // test for fainting
+      if (two->fainted())
+      {
+         cout << endl << "Opponent's " << two->getName() << " fainted!\n";
+         two = c.getNext();
+         
+         // set modifiers to normal
+         battlePrep(two);
+      }
+     
+      if (one->fainted())
+      {
+         cout << endl << one->getName() << " fainted!\n";
+         one = p.getNext();
+         
+         // set modifiers to normal
+         battlePrep(one);   
+      }
+   }
+   if (!one->fainted())
+   {
+      cout << "\nYou win!\n";
+   }
+   else
+   {
+      cout << "\nYou lose!\n";
+      win = false;
+   }
+   return win;
+}
+
 Move * Game::selectMove(const Pokemon & src)
 {
    int num = 0; // screen option

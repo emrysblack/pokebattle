@@ -4,7 +4,7 @@
 //class Pokemon;
 //class Trainer;
 //class Move;
-//#include "trainer.h"
+#include "trainer.h"
 //#include "pokemon.h"
 //#include "move.h"
 class Game
@@ -45,5 +45,6 @@ class Game
    }
    void battlePrep(Pokemon * poke);
    bool battle(Trainer& p, Trainer& c);
+   bool netBattle(Trainer& p, Trainer& c);
 };
 #endif

@@ -2,7 +2,8 @@
 
 #ifndef ATTACK_H
 #define ATTACK_H
-
+#include "pokemon.h"
+#include "move.h"
 class Attack
 {
   public:
@@ -17,6 +18,8 @@ class Attack
       dRole = d;
       critRole = c;
    };
+   bool Execute(Pokemon & src, Pokemon & target, Move * move);
+   float getTypeMult(const Pokemon & target, Move * move);
    int priority;
    int moveNum;
    int accMod; //needed?
