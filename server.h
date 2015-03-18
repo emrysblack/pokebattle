@@ -31,7 +31,66 @@ class Server
         
         cout << "Enter other player's port number: ";
         
+        cout << "What port number will you use? (must be greater than 1000) : ";
+        cin >> portNum;
         
+        
+        cout << "Enter other player's port number: ";
+        
+        int socketServer, player1, player2, clilen1, clilen2;
+        char buffer[1];
+        struct sockaddr_in serv_addr, p1_addr, p2_addr;
+        int n1, n2;
+        
+        if ((socketServer = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        {
+            cerr << "server: can't open stream socket";
+        }
+        
+        bzero((char *) &serv_addr, sizeof(serv_addr));
+        
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_addr.s_addr = INADDR_ANY;
+        serv_addr.sin_port =htons(portNum);
+        
+        //bind the socket
+        if (::bind(socketServer, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+        {
+            cerr << "ERROR on BINDING\n";
+            return false;
+        }
+        
+        bzero(buffer,1);
+        
+        //start the server, listen for clients
+        listen(socketServer, 5);
+        cout << "listening for 1 client\n";
+        clilen1 = sizeof(p1_addr);
+        
+        //accept the clients
+        player1 = accept(socketServer, 0, 0);
+        buffer[0] = 1;
+        n1 = (int)write(player1, buffer, 1);
+        if (player1 < 0)
+        {
+            cerr << "player1 failed to accept";
+            return false;
+        }
+        
+        cout << "looking for 2nd client\n";
+        clilen2 = sizeof(p2_addr);
+        
+        player2 = accept(socketServer, 0, 0);
+        buffer[0] = 1;
+        n2 = (int)write(player2, buffer, 1);
+        if (player2 < 0)
+        {
+            cerr << "player2 failed to accept";
+            return false;
+        }
+        
+        return true;
+
         
         
         return true;
