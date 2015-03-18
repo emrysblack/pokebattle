@@ -36,7 +36,6 @@ class Server
     
     static void server()
     {
-        bool connected = false;
         cout << "What port number will you use? (must be greater than 1000) : ";
         cin >> portNum;
         
@@ -69,16 +68,12 @@ class Server
         listen(socketServer, 5);
         
         
-        //char n;
-        //cout << "Are you a client? y/n\n";
-        //cin >> n;
+        char connected;
+        cout << "Are you a host or client? (h/c)\n";
+        cin >> connected;
         
-        cerr << "BUFFER: " << buffer[0] << endl;
-        cerr << "Connected: " << connected << endl;
-        connected = buffer[0];
-        cerr << "Connected: " << connected << endl;
-        if (!connected)
-        {
+        
+        
         string hostName;
         cout << "Enter other player's hostname: ";
         cin >> hostName;
@@ -87,6 +82,12 @@ class Server
         cout << "Enter other player's port number: ";
         cin >> targetPort;
         
+        if (connected == 'c')
+        {
+            char ready;
+            cout << "Press enter when ready. ";
+            cin >> ready;
+        }
         
         int sockfd, portno, n;
         struct sockaddr_in serv_addr1;
@@ -101,8 +102,7 @@ class Server
         //connect to the server
         portno = targetPort;
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        //if (sockfd < 0)
-        //    error("ERROR opening socket");
+
         
         server = gethostbyname(hostName.c_str());
         
@@ -150,7 +150,7 @@ class Server
             cerr << "player1 failed to accept";
             return;
         }
-        }
+        
         cout << "SUCCESS!!\n";
         
         /*clilen2 = sizeof(p2_addr);
