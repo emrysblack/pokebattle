@@ -70,7 +70,7 @@ class Server
         
         
         char n;
-        cout << "are you a client? y/n\n";
+        cout << "Are you a client? y/n\n";
         cin >> n;
         
         cerr << "BUFFER: " << buffer[0] << endl;
