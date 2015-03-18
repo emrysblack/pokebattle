@@ -109,10 +109,8 @@ class Server
               server->h_length);
         serv_addr1.sin_port = htons(portno);
         
-        if (buffer[0] != 1)
-        {
+        
         listen(socketServer, 5);
-        }
         
         if (connect(sockfd,(struct sockaddr *) &serv_addr1,sizeof(serv_addr1)) < 0)
             //error("ERROR connecting");
@@ -129,9 +127,13 @@ class Server
         
         cout << "listening for 1 client\n";
         clilen1 = sizeof(p1_addr);
-        
+        cerr << buffer[0] << endl;
         //accept the clients
+        if (buffer[0] != 1)
+        {
         player1 = accept(socketServer, 0, 0);
+        }
+        
         cerr << "TEST2\n";
         buffer[0] = 1;
         n1 = (int)write(player1, buffer, 1);
