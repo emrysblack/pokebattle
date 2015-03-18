@@ -119,7 +119,6 @@ class Server
         
         
         
-        cerr << "TEST1\n";
         
         
         
@@ -134,10 +133,8 @@ class Server
         player1 = accept(socketServer, 0, 0);
         }
         
-        cerr << "TEST2\n";
         buffer[0] = 1;
         n1 = (int)write(player1, buffer, 1);
-        cerr << "TEST3\n";
         if (player1 < 0)
         {
             cerr << "player1 failed to accept";
