@@ -8,8 +8,16 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <string> 
+#include <stdlib.h> 
+#include <stdio.h> 
+#include <netinet/in.h> 
 #include "iostream"
 #include "move.h"
+#include<unistd.h>
+#include<arpa/inet.h>
 using namespace std;
 
 class Server 
@@ -26,11 +34,6 @@ class Server
     
     static bool findClient()
     {
-        cout << "What port number will you use? (must be greater than 1000) : ";
-        cin >> portNum;
-        
-        cout << "Enter other player's port number: ";
-        
         cout << "What port number will you use? (must be greater than 1000) : ";
         cin >> portNum;
         
