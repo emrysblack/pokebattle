@@ -74,8 +74,9 @@ class Server
         cin >> n;
         
         cerr << "BUFFER: " << buffer[0] << endl;
-        
+        cerr << "Connected: " << connected << endl;
         connected = buffer[0];
+        cerr << "Connected: " << connected << endl;
         if (!connected)
         {
         string hostName;
