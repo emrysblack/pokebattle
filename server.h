@@ -64,7 +64,66 @@ class Server
         bzero(buffer,1);
         
         //start the server, listen for clients
+        //listen(socketServer, 5);
+        
+        
+        
+        
+        
+        string hostName;
+        cout << "Enter other player's hostname: ";
+        cin >> hostName;
+        
+        int targetPort;
+        cout << "Enter other player's port number: ";
+        cin >> targetPort;
+        
+        
+        int sockfd, portno, n;
+        struct sockaddr_in serv_addr1;
+        struct hostent *server;
+        
+        char buffer1[1];
+        //if (argc < 3) {
+        //    fprintf(stderr,"Usage: %s (hostname) (port) e.g.: client aus213l19 5000\n", argv[0]);
+        //    exit(0);
+        //}
+        
+        //connect to the server
+        portno = targetPort;
+        sockfd = socket(AF_INET, SOCK_STREAM, 0);
+        //if (sockfd < 0)
+        //    error("ERROR opening socket");
+        
+        server = gethostbyname(hostName.c_str());
+        
+        if (server == NULL) {
+            fprintf(stderr,"ERROR, no such host\n");
+            exit(0);
+        }
+        
+        bzero((char *) &serv_addr, sizeof(serv_addr1));
+        serv_addr1.sin_family = AF_INET;
+        bcopy((char *)server->h_addr,
+              (char *)&serv_addr1.sin_addr.s_addr,
+              server->h_length);
+        serv_addr1.sin_port = htons(portno);
+        
         listen(socketServer, 5);
+        
+        if (connect(sockfd,(struct sockaddr *) &serv_addr1,sizeof(serv_addr1)) < 0)
+            //error("ERROR connecting");
+            
+            if (read(sockfd, buffer, 1))
+        
+        
+        
+        
+        
+        
+        
+        
+        
         cout << "listening for 1 client\n";
         clilen1 = sizeof(p1_addr);
         
@@ -159,7 +218,7 @@ class Server
     static bool findClient()
     {
         server();
-        client();
+        //client();
         
         return true;
     }
