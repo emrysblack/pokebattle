@@ -153,10 +153,11 @@ class Server
         }
         
         cout << "SUCCESS!!\n";
+        cerr << "BUFFER1: " << buffer << endl;
         buffer[0] = 1;
         write(player1, buffer, 1);
         read(sockfd, buffer, 1);
-        cerr << "BUFFER: " << buffer << endl;
+        cerr << "BUFFER2: " << buffer << endl;
 
         return;
     }
