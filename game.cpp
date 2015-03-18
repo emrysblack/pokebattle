@@ -5,6 +5,7 @@
 #include "pokemon.h"
 #include "move.h"
 #include "game.h"
+#include "attack.h"
 #include "server.h"
 using namespace std;
 
