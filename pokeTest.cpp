@@ -9,7 +9,7 @@
 #include "game.h"
 using namespace std;
 
-int Server::portNum = 5000;
+int Server::portNum;
 int Server::serverSocket;
 int Server::clientSocket;
 
