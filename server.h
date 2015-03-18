@@ -28,6 +28,7 @@ class Server
     static int serverSocket;
     static int clientSocket;
     
+    
     /* const int OP_MOVE1 = 1; */
     /* const int OP_MOVE2 = 2; */
     /* const int OP_MOVE3 = 3; */
@@ -35,6 +36,7 @@ class Server
     
     static void server()
     {
+        bool connected = false;
         cout << "What port number will you use? (must be greater than 1000) : ";
         cin >> portNum;
         
@@ -64,12 +66,17 @@ class Server
         bzero(buffer,1);
         
         //start the server, listen for clients
-        //listen(socketServer, 5);
+        listen(socketServer, 5);
         
         
         
         
         
+        cerr << buffer[0] << endl;
+        
+        connected = buffer[0];
+        if (!connected)
+        {
         string hostName;
         cout << "Enter other player's hostname: ";
         cin >> hostName;
@@ -115,7 +122,7 @@ class Server
         if (connect(sockfd,(struct sockaddr *) &serv_addr1,sizeof(serv_addr1)) < 0)
             //error("ERROR connecting");
             
-            if (read(sockfd, buffer, 1))
+            read(sockfd, buffer, 1);
         
         
         
@@ -128,10 +135,11 @@ class Server
         clilen1 = sizeof(p1_addr);
         cerr << buffer[0] << endl;
         //accept the clients
-        if (buffer[0] != 1)
-        {
+        //if (buffer[0] != 1)
+        //{
         player1 = accept(socketServer, 0, 0);
-        }
+            connected = true;
+        //}
         
         buffer[0] = 1;
         n1 = (int)write(player1, buffer, 1);
@@ -140,8 +148,9 @@ class Server
             cerr << "player1 failed to accept";
             return;
         }
-        
+        }
         cout << "SUCCESS!!\n";
+        
         /*clilen2 = sizeof(p2_addr);
         
         player2 = accept(socketServer, 0, 0);
