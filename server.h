@@ -72,7 +72,7 @@ class Server
         
         
         
-        cerr << "BUFFER: "buffer[0] << endl;
+        cerr << "BUFFER: " << buffer[0] << endl;
         
         connected = buffer[0];
         if (!connected)
