@@ -79,7 +79,7 @@ class Server
         }
         
         cout << "SUCCESS!!\n";
-        clilen2 = sizeof(p2_addr);
+        /*clilen2 = sizeof(p2_addr);
         
         player2 = accept(socketServer, 0, 0);
         buffer[0] = 1;
@@ -88,8 +88,8 @@ class Server
         {
             cerr << "player2 failed to accept";
             return;
-        }
-
+        }*/
+        return;
     }
     
     static void client()
