@@ -69,9 +69,9 @@ class Server
         listen(socketServer, 5);
         
         
-        char n;
-        cout << "Are you a client? y/n\n";
-        cin >> n;
+        //char n;
+        //cout << "Are you a client? y/n\n";
+        //cin >> n;
         
         cerr << "BUFFER: " << buffer[0] << endl;
         cerr << "Connected: " << connected << endl;
@@ -140,7 +140,7 @@ class Server
         //if (buffer[0] != 1)
         //{
         player1 = accept(socketServer, 0, 0);
-            connected = true;
+            //connected = true;
         //}
         
         buffer[0] = 1;
