@@ -84,9 +84,10 @@ class Server
         
         if (connected == 'c')
         {
-            char ready;
+            char ready[1];
             cout << "Press enter when ready. ";
-            cin >> ready;
+            cin.ignore();
+            cin.getline(ready, 1);//cin >> ready;
         }
         
         int sockfd, portno, n;
@@ -152,88 +153,18 @@ class Server
         }
         
         cout << "SUCCESS!!\n";
-        
-        /*clilen2 = sizeof(p2_addr);
-        
-        player2 = accept(socketServer, 0, 0);
         buffer[0] = 1;
-        n2 = (int)write(player2, buffer, 1);
-        if (player2 < 0)
-        {
-            cerr << "player2 failed to accept";
-            return;
-        }*/
-        return;
-    }
-    
-    static void client()
-    {
-        string hostName;
-        cout << "Enter other player's hostname: ";
-        cin >> hostName;
-        
-        int targetPort;
-        cout << "Enter other player's port number: ";
-        cin >> targetPort;
-        
-        
-        int sockfd, portno, n;
-        struct sockaddr_in serv_addr;
-        struct hostent *server;
-        
-        char buffer[1];
-        //if (argc < 3) {
-        //    fprintf(stderr,"Usage: %s (hostname) (port) e.g.: client aus213l19 5000\n", argv[0]);
-        //    exit(0);
-        //}
-        
-        //connect to the server
-        portno = targetPort;
-        sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        //if (sockfd < 0)
-        //    error("ERROR opening socket");
-        
-        server = gethostbyname(hostName.c_str());
-        
-        if (server == NULL) {
-            fprintf(stderr,"ERROR, no such host\n");
-            exit(0);
-        }
-        
-        bzero((char *) &serv_addr, sizeof(serv_addr));
-        serv_addr.sin_family = AF_INET;
-        bcopy((char *)server->h_addr,
-              (char *)&serv_addr.sin_addr.s_addr,
-              server->h_length);
-        serv_addr.sin_port = htons(portno);
-        
-        if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
-            //error("ERROR connecting");
-        
-        if (read(sockfd, buffer, 1))
-            //listen for input from the server
-            /*while(buffer[0] != 'q')
-            {
-                printf("Please enter your choice (r,p,s,q): ");
-                bzero(buffer,1);
-                cin >> buffer;
-                
-                translateSend(buffer, sockfd);
-                
-                bzero(buffer,1);
-                translateRead(buffer, sockfd);
-                
-            }*/
-        close(sockfd);
-        
-        return;
+        write(player1, buffer, 1);
+        read(sockfd, buffer, 1);
+        cerr << "BUFFER: " << buffer << endl;
 
+        return;
     }
+
     
     static bool findClient()
     {
         server();
-        //client();
         
         return true;
     }
