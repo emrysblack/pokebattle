@@ -86,8 +86,9 @@ class Server
         {
             char ready[1];
             cout << "Press enter when ready. ";
-            cin.ignore();
-            cin.getline(ready, 1);//cin >> ready;
+            cin >> ready;
+            //cin.ignore();
+            //cin.getline(ready, 1);//cin >> ready;
         }
         
         int sockfd, portno, n;
@@ -153,6 +154,7 @@ class Server
         }
         
         cout << "SUCCESS!!\n";
+        buffer[0] = 0;
         cerr << "BUFFER1: " << buffer << endl;
         buffer[0] = 1;
         write(player1, buffer, 1);
