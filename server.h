@@ -109,7 +109,7 @@ class Server
               server->h_length);
         serv_addr1.sin_port = htons(portno);
         
-        if (buffer[0] != '1')
+        if (buffer[0] != 1)
         {
         cerr << "Waiting...\n";
         listen(socketServer, 5);
