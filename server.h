@@ -69,10 +69,11 @@ class Server
         listen(socketServer, 5);
         
         
+        char n;
+        cout << "are you a client? y/n\n";
+        cin >> n;
         
-        
-        
-        cerr << "!BUFFER: " << buffer[0] << endl;
+        cerr << "BUFFER: " << buffer[0] << endl;
         
         connected = buffer[0];
         if (!connected)
