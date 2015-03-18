@@ -28,14 +28,12 @@ class Server
     static int serverSocket;
     static int clientSocket;
     
-    
-    /* const int OP_MOVE1 = 1; */
-    /* const int OP_MOVE2 = 2; */
-    /* const int OP_MOVE3 = 3; */
-    /* const int OP_MOVE4 = 4; */
-    
     static void server()
     {
+        char connected;
+        cout << "Are you a host or client? (h/c)\n";
+        cin >> connected;
+        
         cout << "What port number will you use? (must be greater than 1000) : ";
         cin >> portNum;
         
@@ -68,9 +66,7 @@ class Server
         listen(socketServer, 5);
         
         
-        char connected;
-        cout << "Are you a host or client? (h/c)\n";
-        cin >> connected;
+        
         
         
         
@@ -95,11 +91,6 @@ class Server
         struct sockaddr_in serv_addr1;
         struct hostent *server;
         
-        
-        //if (argc < 3) {
-        //    fprintf(stderr,"Usage: %s (hostname) (port) e.g.: client aus213l19 5000\n", argv[0]);
-        //    exit(0);
-        //}
         
         //connect to the server
         portno = targetPort;
@@ -138,12 +129,9 @@ class Server
         cout << "listening for 1 client\n";
         clilen1 = sizeof(p1_addr);
         cerr << buffer[0] << endl;
-        //accept the clients
-        //if (buffer[0] != 1)
-        //{
+
         player1 = accept(socketServer, 0, 0);
-            //connected = true;
-        //}
+ 
         
         buffer[0] = 1;
         n1 = (int)write(player1, buffer, 1);
@@ -153,13 +141,8 @@ class Server
             return;
         }
         
-        cout << "SUCCESS!!\n";
-        buffer[0] = '0';
-        cerr << "BUFFER1: " << buffer << endl;
-        buffer[0] = '1';
-        write(player1, buffer, 1);
         read(sockfd, buffer, 1);
-        cerr << "BUFFER2: " << buffer << endl;
+        cerr << "BUFFER2: " << (int)buffer[0] << endl;
 
         return;
     }
