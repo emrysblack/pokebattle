@@ -28,14 +28,15 @@ class Server
     static int serverSocket;
     static int clientSocket;
     
-    static void server()
+    static bool findClient()
     {
         portNum = 5000;
 
         int player1, clilen1;
         char buffer[1];
         struct sockaddr_in serv_addr, p1_addr;
-        int n1, n2;
+        struct sockaddr_in serv_addr1;
+        struct hostent *server;
         
         if ((serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
            cerr << "server: can't open stream socket";
@@ -45,45 +46,35 @@ class Server
         serv_addr.sin_family = AF_INET;
         serv_addr.sin_addr.s_addr = INADDR_ANY;
         serv_addr.sin_port = htons(portNum);
-        
-        //bind the socket
+
+        //automatically generate a port number
         while (::bind(serverSocket, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
         {
            portNum++;
            serv_addr.sin_port = htons(portNum);
         }
+
+        //inform the user of his/her host
         cout << endl << "HOST:" << portNum << endl << endl;
-        bzero(buffer,1);
         
         //start the server, listen for clients
         listen(serverSocket, 5);
         
-        
-        
-        string hostName;
+        string targetHost;
         cout << "Enter other player's hostname: ";
-        cin >> hostName;
+        cin >> targetHost;
         
         int targetPort;
         cout << "Enter other player's port number: ";
         cin >> targetPort;
-
-
-        
-        int n;
-        struct sockaddr_in serv_addr1;
-        struct hostent *server;
         
         //connect to the server
-        targetPort = targetPort;
         clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-
-        
-        server = gethostbyname(hostName.c_str());
-        
-        if (server == NULL) {
-            fprintf(stderr,"ERROR, no such host\n");
-            exit(0);
+        server = gethostbyname(targetHost.c_str());
+        if (server == NULL)
+        {
+           cerr << "ERROR: no such host.\n";
+           exit(0);
         }
         
         bzero((char *) &serv_addr, sizeof(serv_addr1));
@@ -93,30 +84,15 @@ class Server
               server->h_length);
         serv_addr1.sin_port = htons(targetPort);
         
-        
         if (connect(clientSocket,(struct sockaddr *) &serv_addr1,sizeof(serv_addr1)) < 0)
            cerr << "ERROR connecting!\n";
         
         cout << "listening for 1 client\n";
-        clilen1 = sizeof(p1_addr);
-        cerr << buffer[0] << endl;
-
         player1 = accept(serverSocket, 0, 0);
- 
         
         buffer[0] = 1;
-        n1 = (int)write(player1, buffer, 1);
-
-        
+        write(player1, buffer, 1);
         read(clientSocket, buffer, 1);
-
-        return;
-    }
-
-    
-    static bool findClient()
-    {
-        server();
         
         return true;
     }
