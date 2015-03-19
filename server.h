@@ -30,43 +30,33 @@ class Server
     
     static void server()
     {
-        char connected;
-        cout << "Are you a host or client? (h/c)\n";
-        cin >> connected;
-        
-        cout << "What port number will you use? (must be greater than 1000) : ";
-        cin >> portNum;
-        
-        int socketServer, player1, player2, clilen1, clilen2;
+        portNum = 5000;
+
+        int player1, clilen1;
         char buffer[1];
-        struct sockaddr_in serv_addr, p1_addr, p2_addr;
+        struct sockaddr_in serv_addr, p1_addr;
         int n1, n2;
         
-        if ((socketServer = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-        {
-            cerr << "server: can't open stream socket";
-        }
+        if ((serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+           cerr << "server: can't open stream socket";
         
         bzero((char *) &serv_addr, sizeof(serv_addr));
         
         serv_addr.sin_family = AF_INET;
         serv_addr.sin_addr.s_addr = INADDR_ANY;
-        serv_addr.sin_port =htons(portNum);
+        serv_addr.sin_port = htons(portNum);
         
         //bind the socket
-        if (::bind(socketServer, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+        while (::bind(serverSocket, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
         {
-            cerr << "ERROR on BINDING\n";
-            return;
+           portNum++;
+           serv_addr.sin_port = htons(portNum);
         }
-        
+        cout << endl << "HOST:" << portNum << endl << endl;
         bzero(buffer,1);
         
         //start the server, listen for clients
-        listen(socketServer, 5);
-        
-        
-        
+        listen(serverSocket, 5);
         
         
         
@@ -77,24 +67,16 @@ class Server
         int targetPort;
         cout << "Enter other player's port number: ";
         cin >> targetPort;
+
+
         
-        if (connected == 'c')
-        {
-            char ready[1];
-            cout << "Press enter when ready. ";
-            cin >> ready;
-            //cin.ignore();
-            //cin.getline(ready, 1);//cin >> ready;
-        }
-        
-        int sockfd, portno, n;
+        int n;
         struct sockaddr_in serv_addr1;
         struct hostent *server;
         
-        
         //connect to the server
-        portno = targetPort;
-        sockfd = socket(AF_INET, SOCK_STREAM, 0);
+        targetPort = targetPort;
+        clientSocket = socket(AF_INET, SOCK_STREAM, 0);
 
         
         server = gethostbyname(hostName.c_str());
@@ -109,40 +91,24 @@ class Server
         bcopy((char *)server->h_addr,
               (char *)&serv_addr1.sin_addr.s_addr,
               server->h_length);
-        serv_addr1.sin_port = htons(portno);
+        serv_addr1.sin_port = htons(targetPort);
         
         
-        listen(socketServer, 5);
-        
-        if (connect(sockfd,(struct sockaddr *) &serv_addr1,sizeof(serv_addr1)) < 0)
-            //error("ERROR connecting");
-            
-            read(sockfd, buffer, 1);
-        
-        
-        
-        
-        
-        
-        
+        if (connect(clientSocket,(struct sockaddr *) &serv_addr1,sizeof(serv_addr1)) < 0)
+           cerr << "ERROR connecting!\n";
         
         cout << "listening for 1 client\n";
         clilen1 = sizeof(p1_addr);
         cerr << buffer[0] << endl;
 
-        player1 = accept(socketServer, 0, 0);
+        player1 = accept(serverSocket, 0, 0);
  
         
         buffer[0] = 1;
         n1 = (int)write(player1, buffer, 1);
-        if (player1 < 0)
-        {
-            cerr << "player1 failed to accept";
-            return;
-        }
+
         
-        read(sockfd, buffer, 1);
-        cerr << "BUFFER2: " << (int)buffer[0] << endl;
+        read(clientSocket, buffer, 1);
 
         return;
     }
