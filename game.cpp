@@ -367,12 +367,14 @@ bool Game::netBattle(Trainer& p, Trainer& c)
    std::cout << "-----Battle-----\n\t" << one->getName() << std::endl
              << "VS\n\t" << two->getName()
              << "\n----------------\n";
+   cout << "Press <ENTER> when ready\n";
+   cin.get(option);
    while (!one->fainted() && !two->fainted())
    {
-      std::cout /*<< "\033[2J"*/ << "\n\t" << one->getName() << " HP: "
-                  << one->getHPC()
-                  << "\n\t" << two->getName() << " HP: "
-                  << two->getHPC() << std::endl;
+      std::cout  << "\n\t" << one->getName() << " HP: "
+                 << one->getHPC()
+                 << "\n\t" << two->getName() << " HP: "
+                 << two->getHPC() << std::endl;
       std::cout << "\nBattle Command (? for options) ";
       std::cin >> option;
       option = tolower(option); // convert to lower case
@@ -385,7 +387,7 @@ bool Game::netBattle(Trainer& p, Trainer& c)
       switch(option)
       {
          case 'a':
-            cout << "attack\n";
+            cout << "attack\n" << "\033[2J";
             pMove = selectMove(*one);
             // prep attacks
             p1.accRole = rand() % 100;

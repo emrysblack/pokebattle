@@ -13,7 +13,7 @@ bool Attack::execute(Pokemon & src, Pokemon & target, Move * move)
    float evMod = target.getMod(EVADE);
    (evMod < 0)? evMod = 2/(evMod * -1 + 2) : evMod = (evMod + 2) / 2;
    int accuracy = move->acc * (100 * acMod)/(100 * evMod);
-   cout << accuracy << endl;
+   //cout << accuracy << endl;
    bool hit = accRole < accuracy;
    
    if (!hit)
@@ -26,7 +26,7 @@ bool Attack::execute(Pokemon & src, Pokemon & target, Move * move)
    float dMod = target.getMod(DEFENSE);
    if (move->spec)
    {
-      std::cout << "special!\n";
+      //std::cout << "special!\n";
       sMod = src.getMod(SATTACK);
       dMod = target.getMod(SDEFENSE);
       str = src.getSPStrength();
@@ -36,7 +36,7 @@ bool Attack::execute(Pokemon & src, Pokemon & target, Move * move)
    (sMod < 0)? sMod = 2/(sMod * -1 + 2) : sMod = (sMod + 2) / 2;
    (dMod < 0)? dMod = 2/(dMod * -1 + 2) : dMod = (dMod + 2) / 2;
 
-   cout << endl << sMod << " " << dMod << endl;
+   //cout << endl << sMod << " " << dMod << endl;
    int bPLevels = 2; // battle point levels
    for (int i = 0; i < MOVESET; i++)
    {
@@ -76,7 +76,7 @@ bool Attack::execute(Pokemon & src, Pokemon & target, Move * move)
       // normal value, other stages are 1/8, 1/4, 1/3, 1/2
       float cChance = 100/16;
    
-      cout << "crit chance - " << critRole << endl;
+      //cout << "crit chance - " << critRole << endl;
       bool crit = (critRole <= cChance);
       if (crit)
       {
