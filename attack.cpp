@@ -5,6 +5,16 @@
 #include "pokemon.h"
 #include "move.h"
 using namespace std;
+
+Attack & Attack::operator =(const Attack & rhs)
+{
+   accRole = rhs.accRole;
+   dRole = rhs.dRole;
+   critRole = rhs.critRole;
+   moveNum = rhs.moveNum;
+   pokeNum = rhs.pokeNum;
+}
+
 bool Attack::execute(Pokemon & src, Pokemon & target, Move * move)
 {
    
