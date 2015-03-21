@@ -54,8 +54,20 @@ class Server
            serv_addr.sin_port = htons(portNum);
         }
 
-        //inform the user of his/her port
-        cout << endl << "PORT:" << portNum << endl << endl;
+
+        struct hostent *host;     /* host information */
+        struct in_addr h_addr;    /* internet address */
+        char hostName[256];
+
+        //inform the user of his/her hostName/port
+        gethostname(hostName, 256);
+        host = gethostbyname(hostName);
+        h_addr.s_addr = *((unsigned long *) host->h_addr_list[0]);
+
+        cout << "\nHOSTNAME: " << inet_ntoa(h_addr) << endl;
+        cout << "PORT: " << portNum << endl << endl;
+
+
         
         //start the server, listen for clients
         listen(serverSocket, 5);
