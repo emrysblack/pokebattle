@@ -50,7 +50,6 @@ class Move
                std::cout << " sharply ";
             std::cout << ((stage < 0)? " fell!" : " rose!");
          }
-         std::cout << cValue;
       }
       virtual void effect(Pokemon * target) {}
 };

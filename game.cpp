@@ -368,6 +368,7 @@ bool Game::netBattle(Trainer& p, Trainer& c)
              << "VS\n\t" << two->getName()
              << "\n----------------\n";
    cout << "Press <ENTER> when ready\n";
+   cin.ignore(256, '\n');
    cin.get(option);
    while (!one->fainted() && !two->fainted())
    {
