@@ -23,14 +23,15 @@ class Attack
    {
       *this = rhs;
    }
-   Attack & operator =(const Attack & rhs);
-   /* { */
-   /*    accRole = rhs.accRole; */
-   /*    dRole = rhs.dRole; */
-   /*    critRole = rhs.critRole; */
-   /*    moveNum = rhs.moveNum; */
-   /*    pokeNum = rhs.pokeNum; */
-   /* } */
+   Attack & operator =(const Attack & rhs)
+   {
+      accRole = rhs.accRole;
+      dRole = rhs.dRole;
+      critRole = rhs.critRole;
+      moveNum = rhs.moveNum;
+      pokeNum = rhs.pokeNum;
+      return *this;
+   }
    
    bool execute(Pokemon & src, Pokemon & target, Move * move);
    float getTypeMult(const Pokemon & target, Move * move);
