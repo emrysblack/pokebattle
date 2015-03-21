@@ -3,6 +3,8 @@
 #ifndef POKEMON_H
 #define POKEMON_H
 #include <string>
+//#include "move.h"
+
 // MOVESET has to be the last entry since it contains the number of moves
 enum moves{TACKLE, GROWL, TAILWHIP, SCRATCH, HEADBUTT, BUBBLE, QUICKATTACK,
            SANDATTACK, FEATHERDANCE, MOVESET};

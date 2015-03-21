@@ -11,7 +11,7 @@ Trainer::Trainer()
    numTeam = 3;
 }
 
-Pokemon * Trainer::getNext()
+Pokemon * Trainer::getNext(int & pos)
 {
    int num = 0; // total number of Pokemon 
    int faint = 0; // number of fainted Pokemon
@@ -54,5 +54,6 @@ Pokemon * Trainer::getNext()
       
       
    }
-   return team[option - 1];
+   pos = option - 1;
+   return team[pos];
 }

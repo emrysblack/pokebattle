@@ -2,20 +2,25 @@
 
 #ifndef MOVE_H
 #define MOVE_H
+
+
 class Move
 {  
    public:
-      Move(std::string n = "Unknown", int p = 0, int ac = 100,
-           int s = 0, int aType = NORMAL, bool special = false)
-         :name(n), power(p), acc(ac), priority(s), type(aType),
-          spec(special) {}
-      std::string name;
-      int power;
-      int acc; // accuracy
-      int priority;
-      int type;
-      bool spec; // physical or special attack
-      void changeStat(Pokemon * target, const int statType, int stage)
+      Move(int mNum = MOVESET, std::string n = "Unknown", int p = 0,
+           int ac = 100, int s = 0, int aType = NORMAL, bool special = false)
+         :moveNum(mNum), name(n), power(p), acc(ac), priority(s),
+      type(aType), spec(special) {}
+
+   int moveNum;
+   std::string name;
+   int power;
+   int acc; // accuracy
+   int priority;
+   int type;
+   bool spec; // physical or special attack
+   int getMoveNum() { return moveNum; }
+   void changeStat(Pokemon * target, const int statType, int stage)
       {
          std::cout << target->getName();
          int cValue;
@@ -53,13 +58,13 @@ class Move
 class Tackle : public Move
 {
    public:
-  Tackle() : Move("Tackle", 35){}
+  Tackle() : Move(TACKLE, "Tackle", 35){}
 };
 
 class Growl : public Move
 {
    public:
-      Growl() : Move("Growl"){}
+  Growl() : Move(GROWL, "Growl"){}
        void effect(Pokemon * target)
        {
           changeStat(target, ATTACK, -1);
@@ -69,7 +74,7 @@ class Growl : public Move
 class FeatherDance : public Move
 {
    public:
-      FeatherDance() : Move("Feather Dance"){}
+  FeatherDance() : Move(FEATHERDANCE, "Feather Dance"){}
        void effect(Pokemon * target)
        {
           changeStat(target, ATTACK, -2);
@@ -79,7 +84,7 @@ class FeatherDance : public Move
 class TailWhip : public Move
 {
    public:
-      TailWhip() : Move("TailWhip"){}
+  TailWhip() : Move(TAILWHIP, "TailWhip"){}
       void effect(Pokemon * target)
       {
          changeStat(target, DEFENSE, -1);
@@ -89,31 +94,31 @@ class TailWhip : public Move
 class Scratch : public Move
 {
    public:
-  Scratch() : Move("Scratch", 40){}
+  Scratch() : Move(SCRATCH, "Scratch", 40){}
 };
 
 class HeadButt : public Move
 {
    public:
-       HeadButt() : Move("HeadButt", 35){}
+  HeadButt() : Move(HEADBUTT, "HeadButt", 35){}
 };
 
 class QuickAttack : public Move
 {
    public:
-  QuickAttack() : Move ("Quick Attack", 40, 100, 1){}
+  QuickAttack() : Move (QUICKATTACK, "Quick Attack", 40, 100, 1){}
 };
 
 class Bubble : public Move
 {
    public:
-  Bubble() : Move ("Bubble", 20, 100, 0, WATER, true){}
+  Bubble() : Move (BUBBLE, "Bubble", 20, 100, 0, WATER, true){}
 };
 
 class SandAttack : public Move
 {
   public:
-  SandAttack() : Move("Sand Attack"){}
+  SandAttack() : Move(SANDATTACK, "Sand Attack"){}
    void effect(Pokemon * target)
    {
       changeStat(target, ACC, -1);

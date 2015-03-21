@@ -15,7 +15,7 @@
 #include <stdio.h> 
 #include <netinet/in.h> 
 #include <iostream>
-#include "move.h"
+#include "attack.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -27,12 +27,12 @@ class Server
     static int portNum;
     static int serverSocket;
     static int clientSocket;
-    
+    static int player1;
     static bool findClient()
     {
         portNum = 5000;
-
-        int player1, clilen1;
+        int clilen1;
+        
         char buffer[1];
         struct sockaddr_in serv_addr, p1_addr;
         struct sockaddr_in serv_addr1;
@@ -54,8 +54,8 @@ class Server
            serv_addr.sin_port = htons(portNum);
         }
 
-        //inform the user of his/her host
-        cout << endl << "HOST:" << portNum << endl << endl;
+        //inform the user of his/her port
+        cout << endl << "PORT:" << portNum << endl << endl;
         
         //start the server, listen for clients
         listen(serverSocket, 5);
@@ -97,16 +97,35 @@ class Server
         return true;
     }
     
-    static void sendMove(Move move)
+    static void sendAttack(const Attack & attack)
     {
-        //send raw data of move
+       char buffer[6];
+       // ready the buffer
+       buffer[0] = attack.accRole;
+       buffer[1] = attack.dRole;
+       buffer[2] = attack.critRole;
+       buffer[3] = attack.moveNum;
+       buffer[4] = attack.pokeNum;
+       buffer[5] = '\0';
+
+       // send the data
+       write(player1, buffer, 5);
     }
     
-    static Move recieveMove()
+    static Attack receiveAttack()
     {
-        Move move;
-        //build a move object using the raw data recieved
-        return move;
+       char buffer[6];
+       // receive data
+       read(clientSocket, buffer, 5);
+       int a = buffer[0];
+       int d = buffer[1];
+       int c = buffer[2];
+       int m = buffer[3];
+       int p = buffer[4];
+       Attack attack(a, d, c, m, p);
+       
+       //build a move object using the raw data recieved
+       return attack;
     }
 };
 

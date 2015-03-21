@@ -139,10 +139,11 @@ void Game::battlePrep(Pokemon * poke)
 
 bool Game::battle(Trainer& p, Trainer& c)
 {
+   int poke1, poke2;
    bool player = true;
    bool win = true; // assume the win
-   Pokemon * one = p.getNext();
-   Pokemon * two = c.getNext();
+   Pokemon * one = p.getNext(poke1);
+   Pokemon * two = c.getNext(poke2);
    Pokemon * first = one;
    Pokemon * second = two;
    // set modifiers to normal for battle
@@ -302,7 +303,7 @@ bool Game::battle(Trainer& p, Trainer& c)
       if (two->fainted())
       {
          cout << endl << "Opponent's " << two->getName() << " fainted!\n";
-         two = c.getNext();
+         two = c.getNext(poke2);
          
          // set modifiers to normal
          battlePrep(two);
@@ -311,7 +312,7 @@ bool Game::battle(Trainer& p, Trainer& c)
       if (one->fainted())
       {
          cout << endl << one->getName() << " fainted!\n";
-         one = p.getNext();
+         one = p.getNext(poke1);
          
          // set modifiers to normal
          battlePrep(one);   
@@ -331,13 +332,35 @@ bool Game::battle(Trainer& p, Trainer& c)
 
 bool Game::netBattle(Trainer& p, Trainer& c)
 {
-   bool player = true;
+   bool firstPlayer = true;
    bool win = true; // assume the win
-   Pokemon * one = p.getNext();
-   Pokemon * two = c.getNext();
+   char buffer[2];
+   int fp;
+   int status;
+   do
+   {
+      // flip coin for first player
+      buffer[1] = '\0';
+      fp = rand() % 100;
+      buffer[0] = fp;
+      status = write(Server::player1, buffer, 1);
+      status = read(Server::clientSocket, buffer, 1);
+      firstPlayer = buffer[0] < fp;
+   } while (buffer[0] == fp);
+   Attack p1;
+   Attack p2;
+   Pokemon * one = p.getNext(p1.pokeNum);
+   buffer[0]= p1.pokeNum;
+   // send and get starting pokemon
+   status = write(Server::player1, buffer, 1);
+   status = read(Server::clientSocket, buffer, 1);
+   Pokemon * two = c.getPoke(buffer[0]);
    Pokemon * first = one;
    Pokemon * second = two;
-   // set modifiers to normal for battle
+   
+   
+   (firstPlayer)? cout << "first player!\n" : cout << "second player!\n";
+    // set modifiers to normal for battle
    battlePrep(one);
    battlePrep(two);
    char option;
@@ -364,7 +387,18 @@ bool Game::netBattle(Trainer& p, Trainer& c)
          case 'a':
             cout << "attack\n";
             pMove = selectMove(*one);
-            cMove = selectMove(*two);
+            // prep attacks
+            p1.accRole = rand() % 100;
+            p1.dRole = rand() % 16;
+            p1.critRole = rand() % 100;
+            p1.moveNum = pMove->getMoveNum();
+            Server::sendAttack(p1);
+            p2 = Server::receiveAttack();
+            cMove = getMove(p2.moveNum);
+            // p2.moveNum = cMove->getMoveNum();
+            // p2.accRole = rand() % 100;
+            // p2.dRole = rand() % 16;
+            // p2.critRole = rand() % 100;
             break;
          case 'd':
             cout << "defend\n";
@@ -402,7 +436,36 @@ bool Game::netBattle(Trainer& p, Trainer& c)
          Move * temp = pMove;
          pMove = cMove;
          cMove = temp;
+         Attack temp1 = p1;
+         p1 = p2;
+         p2 = temp1;
       }
+
+      else if (one->getSpeed() == two->getSpeed() &&
+               pMove->priority == cMove->priority)
+      {
+         // if same between two players, assign randomly
+         // assign player 1 and 2
+         if ((p1.accRole + p1.dRole + p1.critRole +
+              p2.accRole + p2.dRole + p2.critRole + firstPlayer) % 2 == 0)
+         {
+            first = one;
+            second = two;
+         }
+         else
+         {
+            first = two;
+            second = one;
+            // swap moves
+            Move * temp = pMove;
+            pMove = cMove;
+            cMove = temp;
+            Attack temp1 = p1;
+            p1 = p2;
+            p2 = temp1;
+         }
+      }
+      
       else // player moves first
       {
          // cout << "You are faster\n";
@@ -421,30 +484,16 @@ bool Game::netBattle(Trainer& p, Trainer& c)
 
       // execute attack if attack hits
 
-      // accuracy will be move's accuracy times attack poke's accuracy over
-      // target's evasion
-      float acMod = first->getMod(ACC);
-      (acMod < 0)? acMod = 2/(acMod * -1 + 2) : acMod = (acMod + 2) / 2;
-      // (acMod < .25)? acMod = .25 : acMod = acMod;
-      // (acMod > 4)? acMod = 4 : acMod = acMod;
-      float evMod = second->getMod(EVADE);
-      (evMod < 0)? evMod = 2/(evMod * -1 + 2) : evMod = (evMod + 2) / 2;
-      // (evMod < .25)? evMod = .25 : evMod = evMod;
-      // (evMod > 4)? evMod = 4 : evMod = evMod;
-      int accuracy = pMove->acc * (100 * acMod)/(100 * evMod);
-      cout << accuracy << endl;
-      bool hit = (rand() % 100) < accuracy;
-      if (hit)
+      // can use anyone's roles
+      if (!p1.execute(*first, *second, pMove))
       {
-         attack(*first, *second, pMove);
-      }
-      else
-      {
+         //attack(*first, *second, pMove);
          std::cout << std::endl;
          if (first == two)
             cout << "Foe ";
          cout << first->getName();
          std::cout << "'s attack missed!\n";
+
       }
       // second can go if still healthy
       if (!second->fainted())
@@ -456,27 +505,7 @@ bool Game::netBattle(Trainer& p, Trainer& c)
               << " used " << cMove->name << "!\n";
          // execute attack if attack hits
 
-         // prepare random 
-         // srand(time(NULL));
-
-         // accuracy will be move's accuracy times attack poke's
-         // accuracy over target's evasion
-         acMod = second->getMod(ACC);
-         (acMod < 0)? acMod = 2/(acMod * -1 + 2) : acMod = (acMod + 2) / 2;
-         (acMod < .25)? acMod = .25 : acMod = acMod;
-         (acMod > 4)? acMod = 4 : acMod = acMod;
-         evMod = first->getMod(EVADE);
-         (evMod < 0)? evMod = 2/(evMod * -1 + 2) : evMod = (evMod + 2) / 2;
-         (evMod < .25)? evMod = .25 : evMod = evMod;
-         (evMod > 4)? evMod = 4 : evMod = evMod;
-         accuracy = cMove->acc * (100 * acMod)/(100 * evMod);
-         cout << accuracy << endl;
-         hit = (rand() % 100) < accuracy;
-         if (hit)
-         {
-           attack(*second, *first, cMove);
-         }
-         else
+         if (!p2.execute(*second, *first, cMove))
          {
             cout << endl;
             if (second == two)
@@ -494,7 +523,11 @@ bool Game::netBattle(Trainer& p, Trainer& c)
       if (two->fainted())
       {
          cout << endl << "Opponent's " << two->getName() << " fainted!\n";
-         two = c.getNext();
+         //two = c.getNext(p2.pokeNum);
+         
+         status = read(Server::clientSocket, buffer, 1);
+         two = c.getPoke(buffer[0]);
+
          
          // set modifiers to normal
          battlePrep(two);
@@ -503,8 +536,9 @@ bool Game::netBattle(Trainer& p, Trainer& c)
       if (one->fainted())
       {
          cout << endl << one->getName() << " fainted!\n";
-         one = p.getNext();
-         
+         one = p.getNext(p1.pokeNum);
+         buffer[0] = p1.pokeNum;
+         status = write(Server::player1, buffer, 1);
          // set modifiers to normal
          battlePrep(one);   
       }
@@ -531,9 +565,11 @@ Move * Game::selectMove(const Pokemon & src)
          cout << ++num << " - " << moveList[i]->name << endl;
       }
    }
+   
    int option;
    cout << "\nselect Move: ";
    cin >> option;
+   
    while (cin.fail() || option < 1 || option > num)
    {
       if (cin.fail())
@@ -545,17 +581,25 @@ Move * Game::selectMove(const Pokemon & src)
       cout << "\nselect Move: ";
       cin >> option;
    }
-      // select move from option
-      num = 0;
-      int i = 0;
-      while(num != option)
+   
+   // select move from option
+   num = 0;
+   int i = 0;
+   
+   while(num != option)
+   {
+      if (src.moveSet[i] > 0)
       {
-         if (src.moveSet[i] > 0)
-         {
-            ++num;
-         }
-         ++i;
+         ++num;
       }
-      // i - 1 due to extra i++ at bottom of loop
-      return moveList[i - 1];
+      ++i;
+   }
+   
+   // i - 1 due to extra i++ at bottom of loop
+   return moveList[i - 1];
+}
+
+Move * Game::getMove(int num)
+{
+   return moveList[num];
 }

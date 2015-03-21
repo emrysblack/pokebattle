@@ -2,31 +2,44 @@
 
 #ifndef ATTACK_H
 #define ATTACK_H
+
 #include "pokemon.h"
 #include "move.h"
+
 class Attack
 {
   public:
-   Attack();
-   Attack(int p, int m, int a, int e, int a1, int d, int c)
+   Attack() : accRole(0), dRole(0), critRole(0), moveNum(0), pokeNum(0){};
+   Attack(int a, int d, int c, int m, int p)
    {
-      priority = p;
-      moveNum = m;
-      accMod = a;
-      evMod = e;
-      accRole = a1;
+      accRole = a;
       dRole = d;
       critRole = c;
-   };
-   bool Execute(Pokemon & src, Pokemon & target, Move * move);
+      moveNum = m;
+      pokeNum = p;
+   }
+   
+   Attack(const Attack & rhs)
+   {
+      *this = rhs;
+   }
+   Attack & operator =(const Attack & rhs)
+   {
+      accRole = rhs.accRole;
+      dRole = rhs.dRole;
+      critRole = rhs.critRole;
+      moveNum = rhs.moveNum;
+      pokeNum = rhs.pokeNum;
+   }
+   
+   bool execute(Pokemon & src, Pokemon & target, Move * move);
    float getTypeMult(const Pokemon & target, Move * move);
-   int priority;
-   int moveNum;
-   int accMod; //needed?
-   int evMod; // needed?
    int accRole;
    int dRole;
    int critRole;
+   int moveNum;
+   int pokeNum;
   private:
 };
+
 #endif

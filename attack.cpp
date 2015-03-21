@@ -1,12 +1,11 @@
 // team class
 #include <iostream>
 #include <string>
-//#include <cstdlib> // for random numbers
 #include "attack.h"
 #include "pokemon.h"
 #include "move.h"
 using namespace std;
-bool Attack::Execute(Pokemon & src, Pokemon & target, Move * move)
+bool Attack::execute(Pokemon & src, Pokemon & target, Move * move)
 {
    
    float acMod = src.getMod(ACC);
@@ -15,7 +14,8 @@ bool Attack::Execute(Pokemon & src, Pokemon & target, Move * move)
    (evMod < 0)? evMod = 2/(evMod * -1 + 2) : evMod = (evMod + 2) / 2;
    int accuracy = move->acc * (100 * acMod)/(100 * evMod);
    cout << accuracy << endl;
-   bool hit = (accRole % 100) < accuracy;
+   bool hit = accRole < accuracy;
+   
    if (!hit)
    {
       return false;
@@ -62,7 +62,7 @@ bool Attack::Execute(Pokemon & src, Pokemon & target, Move * move)
 
    // mod and final damage
    float mod = stab * typeMult * (bool)move->power;
-   float p = ((dRole % 16 + 85)/100.0); // 81 - 100 % dam
+   float p = ((dRole + 85)/100.0); // 81 - 100 % dam
    int damage = percent * mod * p; 
    //cout << "damage value: " << damage << endl << "percent: " << p << endl;
    
@@ -76,9 +76,8 @@ bool Attack::Execute(Pokemon & src, Pokemon & target, Move * move)
       // normal value, other stages are 1/8, 1/4, 1/3, 1/2
       float cChance = 100/16;
    
-      int cc = critRole % 100;
-      cout << "crit chance - " << cc << endl;
-      bool crit = (cc <= cChance);
+      cout << "crit chance - " << critRole << endl;
+      bool crit = (critRole <= cChance);
       if (crit)
       {
          damage *= 1.5;

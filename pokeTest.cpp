@@ -12,7 +12,7 @@ using namespace std;
 int Server::portNum;
 int Server::serverSocket;
 int Server::clientSocket;
-
+int Server::player1;
 void mSetUp()
 {
    Server::findClient();
@@ -84,9 +84,9 @@ void interact()
    do
    { 
       cout << "\nWhat would you like to do? \n";
-       cout << "b: battle\n";
-       cout << "m: multiplayer\n";
-       cout << "q: quit\n";
+      cout << "b: battle\n";
+      cout << "m: multiplayer\n";
+      cout << "q: quit\n > ";
       cin >> option;
       option = tolower(option); // convert to lower case
       switch (option)
@@ -96,6 +96,7 @@ void interact()
             break;
          case 'm':
               mSetUp();
+              game.netBattle(p, c);
             break;
          case 'q':
             cout << "Thanks for playing\n";

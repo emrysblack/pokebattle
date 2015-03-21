@@ -13,6 +13,7 @@ trainer.o : trainer.cpp trainer.h pokemon.h
 
 pokeTest.o : pokeTest.cpp trainer.h pokemon.h move.h game.h server.h
 	g++ -c pokeTest.cpp
+
 attack.o : attack.cpp attack.h pokemon.h move.h
 	g++ -c attack.cpp
 

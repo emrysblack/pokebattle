@@ -8,7 +8,8 @@ class Trainer
 {
    public:
    int numTeam;
-   Pokemon * getNext();
+   Pokemon * getNext(int & pos);
+   Pokemon * getPoke(int pos) { return team[pos]; }
    Pokemon * team[6];
    Trainer();
    ~Trainer()

@@ -14,6 +14,7 @@ class Game
    int numMoves;
    void attack(Pokemon & src, Pokemon & target, Move * move);
    Move * selectMove(const Pokemon & src);
+   Move * getMove(int moveNum);
    float getTypeMult(const Pokemon & target, Move * move);
    void displayOptions()
    {
