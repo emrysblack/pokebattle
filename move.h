@@ -2,7 +2,7 @@
 
 #ifndef MOVE_H
 #define MOVE_H
-
+#include "pokemon.h"
 
 class Move
 {  

@@ -5,8 +5,8 @@
 //class Trainer;
 //class Move;
 #include "trainer.h"
-//#include "pokemon.h"
-//#include "move.h"
+#include "pokemon.h"
+#include "move.h"
 class Game
 {
   private:

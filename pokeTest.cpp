@@ -85,7 +85,7 @@ void interact()
    { 
       cout << "\nWhat would you like to do? \n";
       cout << "b: battle\n";
-      cout << "m: multiplayer\n";
+      cout << "m: multiplayer battle\n";
       cout << "q: quit\n > ";
       cin >> option;
       option = tolower(option); // convert to lower case
