@@ -376,18 +376,19 @@ bool Game::netBattle(Trainer& p, Trainer& c)
                  << one->getHPC()
                  << "\n\t" << two->getName() << " HP: "
                  << two->getHPC() << std::endl;
-      std::cout << "\nBattle Command (? for options) ";
-      std::cin >> option;
+      // additional options to be implemented later
+      //std::cout << "\nBattle Command (? for options) ";
+      //std::cin >> option;
       option = tolower(option); // convert to lower case
       int priorityP = 0; // move order for player
       int priorityC = 0; // move order for computer
       Move * pMove;
       Move * cMove;
 
-      // select action
-      switch(option)
-      {
-         case 'a':
+      // select action - to be supported later
+      //switch(option)
+      //{
+      //   case 'a':
             cout << "attack\n" << "\033[2J";
             pMove = selectMove(*one);
             // prep attacks
@@ -402,26 +403,26 @@ bool Game::netBattle(Trainer& p, Trainer& c)
             // p2.accRole = rand() % 100;
             // p2.dRole = rand() % 16;
             // p2.critRole = rand() % 100;
-            break;
-         case 'd':
-            cout << "defend\n";
-            break;
-         case 's':
-            cout << "switch pokemon\n";
-            break;
-         case 'i':
-            cout << "item\n";
-            break;
-         case 'r':
-            cout << "run\n";
-            break;
-         case '?':
-            displayOptions();
-            continue; // display does not cost a turn
-         default:
-            cout << "unknown command\n";
-            continue; // does not cost a turn
-      }
+      //       break;
+      //    case 'd':
+      //       cout << "defend\n";
+      //       break;
+      //    case 's':
+      //       cout << "switch pokemon\n";
+      //       break;
+      //    case 'i':
+      //       cout << "item\n";
+      //       break;
+      //    case 'r':
+      //       cout << "run\n";
+      //       break;
+      //    case '?':
+      //       displayOptions();
+      //       continue; // display does not cost a turn
+      //    default:
+      //       cout << "unknown command\n";
+      //       continue; // does not cost a turn
+      // }
 
       // execute actions in correct order
 
